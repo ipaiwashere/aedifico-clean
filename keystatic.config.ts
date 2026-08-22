@@ -2,11 +2,9 @@ import { config, fields, collection } from '@keystatic/core';
 
 export default config({
   storage: {
-    // Local mode for development — edits files directly on disk, no login needed.
-    // For the live site, switch this to `{ kind: 'cloud' }` and connect it to
-    // Keystatic Cloud (see README) so admins can log in and edit remotely.
     kind: 'cloud',
   },
+
   cloud: {
     project: 'aedifico/aedifico-clean',
   },

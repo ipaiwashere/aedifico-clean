@@ -28,9 +28,15 @@ export const layananLabels: Record<string, string> = {
 };
 
 // Must match the `publicPath` set on the `photo` field in keystatic.config.ts.
-// The Reader API only returns the raw filename (e.g. "photo.jpg") — Keystatic
-// stores the actual file at `<directory>/<slug>/<filename>`, so the real
-// public URL has to be built by combining this prefix + slug + filename.
+//
+// Different storage modes serialize the image field's value differently:
+//  - Local mode (and our own hand-seeded yaml) stores just the bare filename,
+//    e.g. "photo.jpg" — the Reader API doesn't resolve a public URL for us,
+//    so we have to build one ourselves.
+//  - Keystatic Cloud stores the entire already-resolved public path instead,
+//    e.g. "/uploads/projects/bintaro-warehouse/photo.jpg".
+// This handles both, so neither the old seed data nor new Cloud-saved
+// entries break.
 const PHOTO_PUBLIC_PATH = '/uploads/projects/';
 const PHOTO_DIRECTORY = 'public/uploads/projects';
 
