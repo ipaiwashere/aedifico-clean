@@ -34,13 +34,17 @@ export const layananLabels: Record<string, string> = {
 const PHOTO_PUBLIC_PATH = '/uploads/projects/';
 const PHOTO_DIRECTORY = 'public/uploads/projects';
 
-function resolvePhotoUrl(slug: string, filename: string | null): string | null {
-  if (!filename) return null; // no photo field set at all (only possible on old entries)
+function resolvePhotoUrl(slug: string, rawValue: string | null): string | null {
+  if (!rawValue) return null; // no photo field set at all (only possible on old entries)
+
+  const isFullPath = rawValue.startsWith('/');
+  const filename = isFullPath ? rawValue.split('/').pop()! : rawValue;
+  const publicUrl = isFullPath ? rawValue : `${PHOTO_PUBLIC_PATH}${slug}/${filename}`;
 
   const onDiskPath = path.join(process.cwd(), PHOTO_DIRECTORY, slug, filename);
   if (!existsSync(onDiskPath)) return null; // field has a value, but the actual file is missing
 
-  return `${PHOTO_PUBLIC_PATH}${slug}/${filename}`;
+  return publicUrl;
 }
 
 function mapProject(entry: Awaited<ReturnType<typeof reader.collections.projects.all>>[number]) {
