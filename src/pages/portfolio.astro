@@ -53,13 +53,13 @@ const projects = await getAllProjects();
     </div>
 
     <!-- Result count + empty state -->
-    <p data-result-count class="text-sm text-muted"></p>
+    <p data-result-count class="scroll-mt-24 text-sm text-muted"></p>
     <p data-empty-state class="hidden py-16 text-center text-sm text-muted">
       Tidak ada proyek yang sesuai dengan filter yang dipilih.
     </p>
 
     <!-- Grid -->
-    <div data-project-grid class="grid scroll-mt-24 grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+    <div data-project-grid class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
       {projects.map((project) => (
         <a
           href={`/portfolio/${project.slug}`}
@@ -170,7 +170,7 @@ const projects = await getAllProjects();
       btn.addEventListener('click', () => {
         currentPage = page;
         applyFilters();
-        grid?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        resultCount?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
       return btn;
     };
