@@ -1,0 +1,251 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Footer from '../components/Footer.astro';
+import { getAllProjects, tipeLabels, sektorLabels, layananLabels } from '../lib/keystatic';
+
+const projects = await getAllProjects();
+---
+
+<Layout title="Portfolio Lengkap — Aedifico">
+  <Navigation minimal />
+  <Breadcrumbs items={[{ label: 'Homepage', href: '/' }, { label: 'Portfolio' }]} />
+
+  <section class="container-edge flex flex-col gap-3 pb-16 pt-4 md:pb-20">
+    <p class="text-xs font-semibold uppercase tracking-[1.2px] text-brand">Portfolio</p>
+    <h1 class="max-w-[700px] text-3xl font-semibold leading-tight tracking-tight text-ink md:text-4xl">
+      Semua proyek yang telah kami kerjakan.
+    </h1>
+  </section>
+
+  <section class="container-edge flex flex-col gap-8 pb-20">
+    <!-- Filters -->
+    <div class="flex flex-col gap-5 border-y border-border py-6">
+      <div class="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
+        <p class="w-[110px] shrink-0 text-xs font-semibold uppercase tracking-[0.8px] text-muted">Tipe</p>
+        <div class="flex flex-wrap gap-2" data-filter-group="tipe">
+          <button type="button" data-filter-value="" class="filter-chip is-active">Semua</button>
+          {Object.entries(tipeLabels).map(([value, label]) => (
+            <button type="button" data-filter-value={value} class="filter-chip">{label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
+        <p class="w-[110px] shrink-0 text-xs font-semibold uppercase tracking-[0.8px] text-muted">Sektor</p>
+        <div class="flex flex-wrap gap-2" data-filter-group="sektor">
+          <button type="button" data-filter-value="" class="filter-chip is-active">Semua</button>
+          {Object.entries(sektorLabels).map(([value, label]) => (
+            <button type="button" data-filter-value={value} class="filter-chip">{label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2.5 sm:flex-row sm:items-start sm:gap-4">
+        <p class="w-[110px] shrink-0 pt-1.5 text-xs font-semibold uppercase tracking-[0.8px] text-muted">Layanan</p>
+        <div class="flex flex-wrap gap-2" data-filter-group="layanan" data-multi="true">
+          {Object.entries(layananLabels).map(([value, label]) => (
+            <button type="button" data-filter-value={value} class="filter-chip">{label}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Result count + empty state -->
+    <p data-result-count class="text-sm text-muted"></p>
+    <p data-empty-state class="hidden py-16 text-center text-sm text-muted">
+      Tidak ada proyek yang sesuai dengan filter yang dipilih.
+    </p>
+
+    <!-- Grid -->
+    <div data-project-grid class="grid scroll-mt-24 grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map((project) => (
+        <a
+          href={`/portfolio/${project.slug}`}
+          data-project-card
+          data-tipe={project.tipe}
+          data-sektor={project.sektor}
+          data-layanan={project.layanan.join(',')}
+          class="group flex flex-col gap-3.5"
+        >
+          {project.photo ? (
+            <img src={project.photo} alt={project.title} class="aspect-[4/3] w-full object-cover transition-opacity group-hover:opacity-90" />
+          ) : (
+            <div class="aspect-[4/3] w-full bg-neutral-300"></div>
+          )}
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="text-lg font-semibold tracking-tight text-ink transition-colors group-hover:text-brand">{project.title}</h3>
+              <p class="whitespace-nowrap text-[11px] uppercase tracking-[0.7px] text-muted">
+                {project.tipeLabel} / {project.year}
+              </p>
+            </div>
+            <p class="text-xs text-muted">{project.sektorLabel}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+    <!-- Pagination -->
+    <nav data-pagination aria-label="Pagination" class="hidden gap-2 pt-4"></nav>
+  </section>
+
+  <Footer />
+
+  <style>
+    .filter-chip {
+      padding: 0.5rem 0.875rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-ink);
+      border: 1px solid var(--color-border);
+      transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .filter-chip:hover {
+      border-color: var(--color-ink);
+    }
+    .filter-chip.is-active {
+      background-color: var(--color-ink);
+      color: var(--color-cream);
+      border-color: var(--color-ink);
+    }
+  </style>
+
+  <script>
+  const PAGE_SIZE = 12;
+
+  const grid = document.querySelector('[data-project-grid]');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-project-card]'));
+  const groups = Array.from(document.querySelectorAll<HTMLElement>('[data-filter-group]'));
+  const emptyState = document.querySelector('[data-empty-state]');
+  const resultCount = document.querySelector('[data-result-count]');
+  const pagination = document.querySelector<HTMLElement>('[data-pagination]');
+
+  // State: single value for tipe/sektor, a Set for the multi-select layanan group.
+  const state: Record<string, string | Set<string>> = {
+    tipe: '',
+    sektor: '',
+    layanan: new Set<string>(),
+  };
+
+  let currentPage = 1;
+
+  function getMatchingCards(): HTMLElement[] {
+    return cards.filter((card) => {
+      const matchesTipe = !state.tipe || card.dataset.tipe === state.tipe;
+      const matchesSektor = !state.sektor || card.dataset.sektor === state.sektor;
+
+      const layananSet = state.layanan as Set<string>;
+      const cardLayanan = (card.dataset.layanan ?? '').split(',');
+      const matchesLayanan = layananSet.size === 0 || cardLayanan.some((l) => layananSet.has(l));
+
+      return matchesTipe && matchesSektor && matchesLayanan;
+    });
+  }
+
+  function renderPagination(totalPages: number) {
+    if (!pagination) return;
+
+    if (totalPages <= 1) {
+      pagination.classList.add('hidden');
+      pagination.classList.remove('flex', 'items-center', 'justify-center');
+      pagination.innerHTML = '';
+      return;
+    }
+
+    pagination.classList.remove('hidden');
+    pagination.classList.add('flex', 'items-center', 'justify-center');
+    pagination.innerHTML = '';
+
+    const baseClasses = 'flex h-10 min-w-10 items-center justify-center border px-2 text-sm font-medium transition-colors';
+    const inactiveClasses = 'border-border text-ink hover:border-ink';
+    const activeClasses = 'border-ink bg-ink text-cream';
+
+    const makeButton = (label: string, page: number, isActive = false) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = label;
+      btn.className = `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`;
+      btn.addEventListener('click', () => {
+        currentPage = page;
+        applyFilters();
+        grid?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      return btn;
+    };
+
+    if (currentPage > 1) {
+      pagination.appendChild(makeButton('‹', currentPage - 1));
+    }
+    for (let page = 1; page <= totalPages; page++) {
+      pagination.appendChild(makeButton(String(page), page, page === currentPage));
+    }
+    if (currentPage < totalPages) {
+      pagination.appendChild(makeButton('›', currentPage + 1));
+    }
+  }
+
+  function applyFilters() {
+    const matching = getMatchingCards();
+    const totalPages = Math.max(1, Math.ceil(matching.length / PAGE_SIZE));
+
+    // Clamp in case a filter change made the current page no longer exist.
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const pageStart = (currentPage - 1) * PAGE_SIZE;
+    const pageEnd = pageStart + PAGE_SIZE;
+    const visibleOnPage = new Set(matching.slice(pageStart, pageEnd));
+
+    cards.forEach((card) => {
+      card.classList.toggle('hidden', !visibleOnPage.has(card));
+    });
+
+    emptyState?.classList.toggle('hidden', matching.length > 0);
+    grid?.classList.toggle('hidden', matching.length === 0);
+
+    if (resultCount) {
+      if (matching.length === 0) {
+        resultCount.textContent = '';
+      } else {
+        const shownStart = pageStart + 1;
+        const shownEnd = Math.min(pageEnd, matching.length);
+        resultCount.textContent = `Menampilkan ${shownStart}–${shownEnd} dari ${matching.length} proyek`;
+      }
+    }
+
+    renderPagination(totalPages);
+  }
+
+  groups.forEach((group) => {
+    const groupName = group.dataset.filterGroup!;
+    const isMulti = group.dataset.multi === 'true';
+    const buttons = Array.from(group.querySelectorAll<HTMLButtonElement>('.filter-chip'));
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const value = button.dataset.filterValue ?? '';
+
+        if (isMulti) {
+          const set = state[groupName] as Set<string>;
+          if (set.has(value)) {
+            set.delete(value);
+            button.classList.remove('is-active');
+          } else {
+            set.add(value);
+            button.classList.add('is-active');
+          }
+        } else {
+          state[groupName] = value;
+          buttons.forEach((b) => b.classList.toggle('is-active', b === button));
+        }
+
+        currentPage = 1; // any filter change resets back to page 1
+        applyFilters();
+      });
+    });
+  });
+
+  applyFilters();
+  </script>
+</Layout>

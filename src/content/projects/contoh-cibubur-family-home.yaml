@@ -1,0 +1,10 @@
+title: 'Contoh: Cibubur Family Home'
+tipe: pembangunan
+sektor: residensial
+layanan:
+  - konstruksi-general
+  - infrastruktur
+year: '2021'
+detail: 'Ini adalah data contoh (sample) untuk menguji tampilan portfolio, filter, dan pagination. Hapus kapan saja lewat Keystatic atau langsung dari folder src/content/projects.'
+highlight: false
+photo: photo.jpg

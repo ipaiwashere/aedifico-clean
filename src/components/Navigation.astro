@@ -1,0 +1,115 @@
+---
+import logo from '../assets/brand/logo.png';
+
+interface Props {
+  // When true, hides the section links + hamburger menu, leaving just the
+  // logo. Used on sub-pages (portfolio listing, project detail) where
+  // scroll-to-section links don't make sense — those pages use
+  // breadcrumbs for navigation context instead.
+  minimal?: boolean;
+}
+
+const { minimal = false } = Astro.props;
+
+const links = [
+  { label: 'Portfolio', href: '/#portfolio' },
+  { label: 'Sektor', href: '/#sektor' },
+  { label: 'Layanan', href: '/#layanan' },
+  { label: 'Kontak', href: '/#kontak' },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-border bg-cream">
+  <div class="container-edge flex items-center justify-between gap-4 py-[18px] md:py-5">
+    <a href="/" class="block w-[159px] shrink-0">
+      <img src={logo.src} alt="Aedifico" width="159" height={Math.round(159 * (logo.height / logo.width))} />
+    </a>
+
+    {!minimal && (
+      <>
+        <nav aria-label="Main navigation" class="hidden md:block">
+          <ul class="flex items-center gap-6">
+            {links.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-sm font-medium text-ink whitespace-nowrap transition-colors hover:text-brand"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <button
+          type="button"
+          data-menu-toggle
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label="Toggle menu"
+          class="flex h-10 w-10 shrink-0 items-center justify-center md:hidden"
+        >
+          <svg data-icon-open width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5H17M3 10H17M3 15H17" stroke="#151515" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          <svg data-icon-close width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="hidden">
+            <path d="M5 5L15 15M15 5L5 15" stroke="#151515" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </>
+    )}
+  </div>
+
+  {!minimal && (
+    <nav id="mobile-menu" aria-label="Mobile navigation" data-mobile-menu class="hidden border-t border-border bg-cream md:hidden">
+      <ul class="container-edge flex flex-col gap-1 py-4">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              data-mobile-link
+              class="block py-2.5 text-base font-medium text-ink transition-colors hover:text-brand"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )}
+</header>
+
+<script>
+  const toggle = document.querySelector('[data-menu-toggle]');
+  const menu = document.querySelector('[data-mobile-menu]');
+  const iconOpen = document.querySelector('[data-icon-open]');
+  const iconClose = document.querySelector('[data-icon-close]');
+
+  function closeMenu() {
+    menu?.classList.add('hidden');
+    toggle?.setAttribute('aria-expanded', 'false');
+    iconOpen?.classList.remove('hidden');
+    iconClose?.classList.add('hidden');
+  }
+
+  function openMenu() {
+    menu?.classList.remove('hidden');
+    toggle?.setAttribute('aria-expanded', 'true');
+    iconOpen?.classList.add('hidden');
+    iconClose?.classList.remove('hidden');
+  }
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  document.querySelectorAll('[data-mobile-link]').forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+</script>

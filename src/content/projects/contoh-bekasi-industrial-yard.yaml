@@ -1,0 +1,10 @@
+title: 'Contoh: Bekasi Industrial Yard'
+tipe: pembangunan
+sektor: komersil
+layanan:
+  - infrastruktur
+  - arsitektur
+year: '2025'
+detail: 'Ini adalah data contoh (sample) untuk menguji tampilan portfolio, filter, dan pagination. Hapus kapan saja lewat Keystatic atau langsung dari folder src/content/projects.'
+highlight: false
+photo: photo.jpg

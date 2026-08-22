@@ -1,0 +1,57 @@
+---
+const services = [
+  {
+    title: 'Residensial',
+    description: 'Pembangunan dan renovasi hunian dengan presisi struktur, efisiensi tata ruang, dan estetika sesuai keinginan.',
+    // House
+    icon: `<svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M6 10v9a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1v-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>`,
+  },
+  {
+    title: 'Komersil',
+    description: 'Solusi konstruksi ruang usaha, retail, dan gedung kantor yang memadukan daya tarik visual, efisiensi fungsi ruang, serta ketepatan jadwal serah terima.',
+    // Office building with window grid
+    icon: `<svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="3" width="14" height="18" rx="1" stroke="currentColor" stroke-width="1.5" />
+      <rect x="8" y="6.5" width="2" height="2" fill="currentColor" />
+      <rect x="14" y="6.5" width="2" height="2" fill="currentColor" />
+      <rect x="8" y="10.5" width="2" height="2" fill="currentColor" />
+      <rect x="14" y="10.5" width="2" height="2" fill="currentColor" />
+      <path d="M10 21v-4h4v4" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+    </svg>`,
+  },
+  {
+    title: 'Industri',
+    description: 'Pembangunan pabrik, gudang, dan fasilitas teknis skala besar dengan daya tahan tinggi, kepatuhan K3 penuh, sesuai spesifikasi beban kerja.',
+    // Factory with chimney
+    icon: `<svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 21V12l5 3.5V12l5 3.5V9l6 4v8H3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+      <path d="M17 9V6h2v2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M3 21h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+    </svg>`,
+  },
+];
+---
+
+<section id="sektor" class="container-edge flex flex-col gap-10 py-16 md:py-20">
+  <div class="flex flex-col gap-3 md:flex-row md:items-start md:gap-12">
+    <p class="w-[220px] shrink-0 text-xs font-semibold uppercase tracking-[1.2px] text-brand">
+      Sektor
+    </p>
+    <h2 class="max-w-[620px] text-3xl font-semibold leading-tight tracking-tight text-ink md:text-4xl">
+      Pengalaman yang teruji di berbagai skala dan tipe proyek.
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
+    {services.map((service) => (
+      <div class="flex flex-col gap-3.5 border-t border-border pt-5">
+        <div class="text-brand" set:html={service.icon} />
+        <h3 class="text-2xl font-semibold tracking-tight text-ink">{service.title}</h3>
+        <p class="text-sm leading-relaxed text-muted">{service.description}</p>
+      </div>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,11 @@
+title: 'Contoh: Kemayoran Logistics Hub'
+tipe: pembangunan
+sektor: industri
+layanan:
+  - arsitektur
+  - interior
+  - konstruksi-general
+year: '2023'
+detail: 'Ini adalah data contoh (sample) untuk menguji tampilan portfolio, filter, dan pagination. Hapus kapan saja lewat Keystatic atau langsung dari folder src/content/projects.'
+highlight: false
+photo: photo.jpg

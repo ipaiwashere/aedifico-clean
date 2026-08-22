@@ -1,0 +1,104 @@
+---
+import { getHighlightedProjects } from '../lib/keystatic';
+
+const projects = await getHighlightedProjects();
+---
+
+<section id="portfolio" class="flex flex-col gap-8 py-16 md:py-20 lg:py-20">
+  <div class="container-edge flex items-start justify-between gap-6">
+    <div class="flex flex-col gap-3 md:flex-row md:items-start md:gap-12">
+      <p class="w-[220px] shrink-0 text-xs font-semibold uppercase tracking-[1.2px] text-brand">
+        Portfolio
+      </p>
+      <h2 class="max-w-[620px] text-3xl font-semibold leading-tight tracking-tight text-ink md:text-4xl">
+        Hasil karya dan bukti eksekusi proyek kami.
+      </h2>
+    </div>
+
+    <div class="hidden shrink-0 items-center gap-2 md:flex">
+      <button
+        type="button"
+        data-carousel-prev
+        aria-label="Previous project"
+        class="flex h-10 w-10 items-center justify-center border border-border text-ink transition-colors hover:bg-ink hover:text-cream"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        data-carousel-next
+        aria-label="Next project"
+        class="flex h-10 w-10 items-center justify-center border border-border text-ink transition-colors hover:bg-ink hover:text-cream"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Full-bleed track: uses the exact same .carousel-edge padding formula as .container-edge
+       above, so its left edge is mathematically guaranteed to match the heading's, at any
+       viewport width, instead of relying on two separate formulas staying in sync. -->
+  <div
+    data-carousel-track
+    class="carousel-edge flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+  >
+    {projects.map((project) => (
+      <a
+        href={`/portfolio/${project.slug}`}
+        class="group flex w-[calc(90vw-16px)] max-w-[1130px] shrink-0 snap-start flex-col gap-4"
+      >
+        {project.photo ? (
+          <img
+            src={project.photo}
+            alt={project.title}
+            class="aspect-[16/9] w-full object-cover transition-opacity group-hover:opacity-90"
+          />
+        ) : (
+          <div class="aspect-[16/9] w-full bg-neutral-300"></div>
+        )}
+        <div class="flex items-center justify-between gap-4">
+          <h3 class="text-xl font-semibold tracking-tight text-ink transition-colors group-hover:text-brand md:text-2xl">
+            {project.title}
+          </h3>
+          <p class="whitespace-nowrap text-[11px] uppercase tracking-[0.7px] text-muted">
+            {project.tipeLabel} / {project.year}
+          </p>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <div class="container-edge flex justify-center">
+    <a
+      href="/portfolio"
+      class="inline-flex items-center gap-2.5 border border-ink px-6 py-3 text-sm font-semibold uppercase tracking-[0.6px] text-ink transition-colors hover:bg-ink hover:text-cream"
+    >
+      Portfolio Lengkap
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </a>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('[data-carousel-track]').forEach((track) => {
+    const section = track.closest('section');
+    const prevBtn = section?.querySelector('[data-carousel-prev]');
+    const nextBtn = section?.querySelector('[data-carousel-next]');
+    const scrollByCard = () => {
+      const card = track.querySelector('a');
+      return card ? card.getBoundingClientRect().width + 16 : 300; // 16 = gap-4
+    };
+    prevBtn?.addEventListener('click', () => {
+      track.scrollBy({ left: -scrollByCard(), behavior: 'smooth' });
+    });
+    nextBtn?.addEventListener('click', () => {
+      track.scrollBy({ left: scrollByCard(), behavior: 'smooth' });
+    });
+  });
+</script>

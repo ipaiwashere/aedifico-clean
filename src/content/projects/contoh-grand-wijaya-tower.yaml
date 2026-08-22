@@ -1,0 +1,10 @@
+title: 'Contoh: Grand Wijaya Tower'
+tipe: renovasi
+sektor: komersil
+layanan:
+  - infrastruktur
+  - arsitektur
+year: '2022'
+detail: 'Ini adalah data contoh (sample) untuk menguji tampilan portfolio, filter, dan pagination. Hapus kapan saja lewat Keystatic atau langsung dari folder src/content/projects.'
+highlight: false
+photo: photo.jpg

@@ -1,0 +1,10 @@
+title: 'Contoh: Ancol Beach Resort'
+tipe: pembangunan
+sektor: industri
+layanan:
+  - mep
+  - infrastruktur
+year: '2023'
+detail: 'Ini adalah data contoh (sample) untuk menguji tampilan portfolio, filter, dan pagination. Hapus kapan saja lewat Keystatic atau langsung dari folder src/content/projects.'
+highlight: false
+photo: photo.jpg

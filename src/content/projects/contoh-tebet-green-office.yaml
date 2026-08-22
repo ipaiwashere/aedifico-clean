@@ -1,0 +1,10 @@
+title: 'Contoh: Tebet Green Office'
+tipe: renovasi
+sektor: komersil
+layanan:
+  - infrastruktur
+  - konstruksi-general
+year: '2022'
+detail: 'Ini adalah data contoh (sample) untuk menguji tampilan portfolio, filter, dan pagination. Hapus kapan saja lewat Keystatic atau langsung dari folder src/content/projects.'
+highlight: false
+photo: photo.jpg

@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  /* Aedifico brand colors (from Figma) */
+  --color-cream: #f4f1eb;      /* page background — "Spring Wood" */
+  --color-ink: #151515;         /* primary text — "Cod Gray" */
+  --color-muted: #615f5b;       /* secondary text — "Chicago" */
+  --color-border: #d7d2c8;      /* hairline borders — "Swirl" */
+  --color-brand: #c63b2e;       /* primary accent (CTA, labels) — "Persian Red" */
+  --color-brand-light: #e96b5f; /* accent on dark bg — "Burnt Sienna" */
+  --color-dark: #151515;        /* dark section background (Contact) */
+  --color-dark-muted: #d4d0c9;  /* muted text on dark bg */
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+  Shared edge padding — the ONE place that defines how far content sits
+  from the browser edge. Every section (Nav, Hero, Portfolio, etc.) uses
+  the container-edge / carousel-edge classes below instead of writing
+  its own padding rules per component, so they can never drift out of sync.
+
+  Below about 1296px wide, this behaves like plain responsive padding.
+  Above that, it grows to keep content capped at a 1200px column,
+  centered, computed once instead of duplicated per component.
+*/
+:root {
+  --container-max: 1280px;
+  --container-pad: 20px; /* mobile */
+}
+
+@media (min-width: 768px) {
+  :root { --container-pad: 32px; } /* tablet */
+}
+
+@media (min-width: 1024px) {
+  :root { --container-pad: 48px; } /* desktop */
+}
+
+.container-edge {
+  padding-left: max(var(--container-pad), calc((100vw - var(--container-max)) / 2 + var(--container-pad)));
+  padding-right: max(var(--container-pad), calc((100vw - var(--container-max)) / 2 + var(--container-pad)));
+}
+
+/* Offsets anchor-link scroll targets (#portfolio, #sektor, etc.) so the
+   sticky header doesn't cover the top of the section when jumped to. */
+[id] {
+  scroll-margin-top: 96px;
+}
+.carousel-edge {
+  padding-left: max(var(--container-pad), calc((100vw - var(--container-max)) / 2 + var(--container-pad)));
+  padding-right: max(var(--container-pad), calc((100vw - var(--container-max)) / 2 + var(--container-pad)));
+  scroll-padding-inline: max(var(--container-pad), calc((100vw - var(--container-max)) / 2 + var(--container-pad)));
+}

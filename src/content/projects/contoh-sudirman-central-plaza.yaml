@@ -1,0 +1,10 @@
+title: 'Contoh: Sudirman Central Plaza'
+tipe: renovasi
+sektor: residensial
+layanan:
+  - eksterior
+  - mep
+year: '2024'
+detail: 'Ini adalah data contoh (sample) untuk menguji tampilan portfolio, filter, dan pagination. Hapus kapan saja lewat Keystatic atau langsung dari folder src/content/projects.'
+highlight: false
+photo: photo.jpg

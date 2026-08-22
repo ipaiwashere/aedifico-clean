@@ -1,0 +1,11 @@
+title: 'Contoh: Tangerang Warehouse Complex'
+tipe: renovasi
+sektor: industri
+layanan:
+  - infrastruktur
+  - interior
+  - arsitektur
+year: '2026'
+detail: 'Ini adalah data contoh (sample) untuk menguji tampilan portfolio, filter, dan pagination. Hapus kapan saja lewat Keystatic atau langsung dari folder src/content/projects.'
+highlight: false
+photo: photo.jpg

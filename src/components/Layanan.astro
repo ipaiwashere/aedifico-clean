@@ -1,0 +1,55 @@
+---
+const services = [
+  {
+    number: '01',
+    title: 'Arsitektur',
+    description: 'Koordinasi konsep, struktur, dan detail bangunan untuk fondasi proyek yang terarah.',
+  },
+  {
+    number: '02',
+    title: 'Interior',
+    description: 'Pengerjaan interior yang menyatukan fungsi, material, dan kualitas finishing.',
+  },
+  {
+    number: '03',
+    title: 'Eksterior',
+    description: 'Pengerjaan fasad, kanopi, cladding, dan elemen luar bangunan yang kuat, rapi, dan sesuai karakter proyek.',
+  },
+  {
+    number: '04',
+    title: 'MEP',
+    description: 'Sistem mekanikal, elektrikal, network/WiFi, CCTV, HVAC, lift/escalator, dan plumbing yang tertata untuk kinerja jangka panjang.',
+  },
+  {
+    number: '05',
+    title: 'Infrastruktur',
+    description: 'Pekerjaan cut & fill, pengecoran, roadwork, dan retaining wall untuk membangun akses serta struktur tapak yang andal.',
+  },
+  {
+    number: '06',
+    title: 'Konstruksi General',
+    description: 'Eksekusi lapangan yang disiplin dari pekerjaan awal hingga serah terima.',
+  },
+];
+---
+
+<section id="layanan" class="container-edge flex flex-col gap-10 py-16 md:py-20">
+  <div class="flex flex-col gap-3 md:flex-row md:items-start md:gap-12">
+    <p class="w-[220px] shrink-0 text-xs font-semibold uppercase tracking-[1.2px] text-brand">
+      Layanan
+    </p>
+    <h2 class="max-w-[620px] text-3xl font-semibold leading-tight tracking-tight text-ink md:text-4xl">
+      Keahlian teknis untuk setiap kebutuhan.
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-x-6 md:gap-y-8">
+    {services.map((service) => (
+      <div class="flex flex-col gap-3.5 border-t border-border pt-5">
+        <p class="text-xs font-semibold tracking-[1px] text-brand">{service.number}</p>
+        <h3 class="text-2xl font-semibold tracking-tight text-ink">{service.title}</h3>
+        <p class="text-sm leading-relaxed text-muted">{service.description}</p>
+      </div>
+    ))}
+  </div>
+</section>
