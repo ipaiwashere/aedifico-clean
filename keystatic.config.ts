@@ -5,7 +5,10 @@ export default config({
     // Local mode for development — edits files directly on disk, no login needed.
     // For the live site, switch this to `{ kind: 'cloud' }` and connect it to
     // Keystatic Cloud (see README) so admins can log in and edit remotely.
-    kind: 'local',
+    kind: 'cloud',
+  },
+  cloud: {
+    project: 'aedifico/aedifico-clean',
   },
 
   collections: {
