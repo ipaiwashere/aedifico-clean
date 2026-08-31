@@ -7,4 +7,5 @@ layanan:
 year: '2025'
 detail: 'Pembangunan gedung kantor dengan fokus pada efisiensi ruang dan sistem MEP terintegrasi.'
 highlight: true
-photo: photo.jpg
+photos:
+  - photo.jpg

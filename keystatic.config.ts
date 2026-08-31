@@ -76,13 +76,19 @@ export default config({
           description: 'Deskripsi singkat tentang proyek ini.',
         }),
 
-        photo: fields.image({
-          label: 'Foto',
-          directory: 'public/uploads/projects',
-          publicPath: '/uploads/projects/',
-          description: 'Format JPEG atau WebP (hindari PNG dan foto HEIC langsung dari iPhone — konversi dulu). Rasio 16:9, lebar sekitar 2200–2400px. Ukuran file idealnya di bawah 300KB — kompres dulu di squoosh.app atau tinypng.com sebelum upload.',
-          validation: { isRequired: true },
-        }),
+        photos: fields.array(
+          fields.image({
+            label: 'Foto',
+            directory: 'public/uploads/projects',
+            publicPath: '/uploads/projects/',
+            validation: { isRequired: true },
+          }),
+          {
+            label: 'Foto-foto Proyek',
+            description: 'Tambahkan satu atau lebih foto. Foto PERTAMA dalam daftar akan menjadi foto utama (ditampilkan di carousel dan halaman portfolio) — geser (drag) untuk mengubah urutan. Format JPEG atau WebP (hindari PNG dan foto HEIC langsung dari iPhone — konversi dulu). Rasio 16:9, lebar sekitar 2200–2400px. Ukuran file idealnya di bawah 300KB — kompres dulu di squoosh.app atau tinypng.com sebelum upload.',
+            validation: { length: { min: 1 } },
+          }
+        ),
 
         highlight: fields.checkbox({
           label: 'Tampilkan di Halaman Utama',

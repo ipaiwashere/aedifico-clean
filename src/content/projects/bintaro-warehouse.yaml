@@ -8,5 +8,6 @@ year: '2024'
 detail: >-
   Pembangunan gudang skala besar dengan spesifikasi beban kerja dan standar K3
   penuh.
-photo: /uploads/projects/bintaro-warehouse/photo.jpg
+photos:
+  - /uploads/projects/bintaro-warehouse/photo.jpg
 highlight: true

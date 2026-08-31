@@ -27,7 +27,7 @@ export const layananLabels: Record<string, string> = {
   'konstruksi-general': 'Konstruksi General',
 };
 
-// Must match the `publicPath` set on the `photo` field in keystatic.config.ts.
+// Must match the `publicPath` set on the `photos` field in keystatic.config.ts.
 //
 // Different storage modes serialize the image field's value differently:
 //  - Local mode (and our own hand-seeded yaml) stores just the bare filename,
@@ -41,7 +41,7 @@ const PHOTO_PUBLIC_PATH = '/uploads/projects/';
 const PHOTO_DIRECTORY = 'public/uploads/projects';
 
 function resolvePhotoUrl(slug: string, rawValue: string | null): string | null {
-  if (!rawValue) return null; // no photo field set at all (only possible on old entries)
+  if (!rawValue) return null; // no photo set (only possible on malformed/old entries)
 
   const isFullPath = rawValue.startsWith('/');
   const filename = isFullPath ? rawValue.split('/').pop()! : rawValue;
@@ -53,7 +53,20 @@ function resolvePhotoUrl(slug: string, rawValue: string | null): string | null {
   return publicUrl;
 }
 
+// Resolves every photo in the array, silently dropping any that turn out to
+// be missing on disk (rather than breaking the whole gallery over one bad
+// entry). The first successfully-resolved photo is the "main" one — order
+// in the CMS array is what determines this, not a separate flag, so it's
+// never possible for zero or multiple photos to be marked main at once.
+function resolvePhotos(slug: string, rawValues: (string | null)[] | undefined): string[] {
+  if (!rawValues) return [];
+  return rawValues
+    .map((raw) => resolvePhotoUrl(slug, raw))
+    .filter((url): url is string => url !== null);
+}
+
 function mapProject(entry: Awaited<ReturnType<typeof reader.collections.projects.all>>[number]) {
+  const photos = resolvePhotos(entry.slug, entry.entry.photos);
   return {
     slug: entry.slug,
     title: entry.entry.title,
@@ -66,7 +79,8 @@ function mapProject(entry: Awaited<ReturnType<typeof reader.collections.projects
     year: entry.entry.year,
     detail: entry.entry.detail,
     highlight: entry.entry.highlight,
-    photo: resolvePhotoUrl(entry.slug, entry.entry.photo),
+    photos, // full gallery, in CMS-defined order
+    photo: photos[0] ?? null, // the main/thumbnail photo — kept as a single field for the carousel and portfolio grid, which only ever show one image
   };
 }
 

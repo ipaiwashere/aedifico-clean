@@ -8,4 +8,5 @@ layanan:
 year: '2025'
 detail: 'Renovasi menyeluruh townhouse termasuk struktur, interior, dan fasad eksterior.'
 highlight: true
-photo: photo.jpg
+photos:
+  - photo.jpg

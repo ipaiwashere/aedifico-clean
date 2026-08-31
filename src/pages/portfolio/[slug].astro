@@ -29,12 +29,34 @@ const { project } = Astro.props;
 
   <section class="container-edge flex flex-col gap-6 pb-10 pt-2 md:pb-14">
     {project.photo ? (
-      <img src={project.photo} alt={project.title} class="aspect-[16/9] w-full object-cover" />
+      <img data-main-photo src={project.photo} alt={project.title} class="aspect-[16/9] w-full object-cover" />
     ) : (
       <div class="aspect-[16/9] w-full bg-neutral-300"></div>
     )}
 
-    <div class="flex flex-col gap-6 lg:flex-row lg:justify-between">
+    {project.photos.length > 1 && (
+      <div class="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8">
+        {project.photos.map((photoUrl: string, i: number) => (
+          <button
+            type="button"
+            data-gallery-thumb
+            data-photo-url={photoUrl}
+            class="aspect-square overflow-hidden ring-2 ring-transparent transition-all hover:opacity-80 data-[active=true]:ring-brand"
+            data-active={i === 0 ? 'true' : 'false'}
+            aria-label={`Lihat foto ${i + 1} dari ${project.photos.length}`}
+            aria-current={i === 0 ? 'true' : 'false'}
+          >
+            <img
+              src={photoUrl}
+              alt={`${project.title} — foto ${i + 1}`}
+              class="h-full w-full object-cover"
+            />
+          </button>
+        ))}
+      </div>
+    )}
+
+    <div class="flex flex-col gap-6 border-t border-border pt-8 lg:flex-row lg:justify-between">
       <div class="flex flex-col gap-4 lg:max-w-[620px]">
         <h1 class="text-3xl font-semibold tracking-tight text-ink md:text-4xl">
           {project.title}
@@ -45,7 +67,7 @@ const { project } = Astro.props;
       </div>
 
       <div class="flex flex-col gap-5 lg:w-[280px] lg:shrink-0">
-        <div class="flex flex-col gap-1.5 border-t border-border pt-4">
+        <div class="flex flex-col gap-1.5 border-t border-border pt-4 lg:border-t-0 lg:pt-0">
           <p class="text-xs font-semibold uppercase tracking-[0.8px] text-muted">Tipe</p>
           <p class="text-sm text-ink">{project.tipeLabel}</p>
         </div>
@@ -86,3 +108,25 @@ const { project } = Astro.props;
 
   <Footer />
 </Layout>
+
+<script>
+  const mainPhoto = document.querySelector<HTMLImageElement>('[data-main-photo]');
+  const thumbs = document.querySelectorAll<HTMLButtonElement>('[data-gallery-thumb]');
+
+  thumbs.forEach((thumb) => {
+    thumb.addEventListener('click', () => {
+      const url = thumb.dataset.photoUrl;
+      if (!mainPhoto || !url) return;
+
+      mainPhoto.src = url;
+
+      // Move the "active" state (highlighted ring) to whichever thumbnail
+      // was just clicked, and mark every other one as inactive.
+      thumbs.forEach((t) => {
+        const isActive = t === thumb;
+        t.dataset.active = isActive ? 'true' : 'false';
+        t.setAttribute('aria-current', isActive ? 'true' : 'false');
+      });
+    });
+  });
+</script>
