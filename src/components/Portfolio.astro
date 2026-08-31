@@ -5,22 +5,73 @@ const projects = await getHighlightedProjects();
 ---
 
 <section id="portfolio" class="flex flex-col gap-8 py-16 md:py-20 lg:py-20">
-  <div class="container-edge flex items-start justify-between gap-6">
-    <div class="flex flex-col gap-3 md:flex-row md:items-start md:gap-12">
-      <p class="w-[220px] shrink-0 text-xs font-semibold uppercase tracking-[1.2px] text-brand">
-        Portfolio
-      </p>
-      <h2 class="max-w-[620px] text-3xl font-semibold leading-tight tracking-tight text-ink md:text-4xl">
-        Hasil karya dan bukti eksekusi proyek kami.
-      </h2>
+  <div class="container-edge flex flex-col gap-3 md:flex-row md:items-start md:gap-12">
+    <p class="w-[220px] shrink-0 text-xs font-semibold uppercase tracking-[1.2px] text-brand">
+      Portfolio
+    </p>
+    <h2 class="max-w-[620px] text-3xl font-semibold leading-tight tracking-tight text-ink md:text-4xl">
+      Hasil karya dan bukti eksekusi proyek kami.
+    </h2>
+  </div>
+
+  <!-- Full-bleed track: uses the exact same .carousel-edge padding formula as .container-edge
+       above, so its left edge is mathematically guaranteed to match the heading's, at any
+       viewport width, instead of relying on two separate formulas staying in sync. -->
+  <div class="relative">
+    <div
+      data-carousel-track
+      class="carousel-edge flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+    >
+      {projects.map((project) => (
+        <a
+          href={`/portfolio/${project.slug}`}
+          class="group flex w-[calc(90vw-16px)] max-w-[1130px] shrink-0 snap-start flex-col gap-4"
+        >
+          {project.photo ? (
+            <img
+              src={project.photo}
+              alt={project.title}
+              class="aspect-[16/9] w-full object-cover transition-opacity group-hover:opacity-90"
+            />
+          ) : (
+            <div class="aspect-[16/9] w-full bg-neutral-300"></div>
+          )}
+          <div class="flex items-center justify-between gap-4">
+            <h3 class="text-xl font-semibold tracking-tight text-ink transition-colors group-hover:text-brand md:text-2xl">
+              {project.title}
+            </h3>
+            <p class="whitespace-nowrap text-[11px] uppercase tracking-[0.7px] text-muted">
+              {project.tipeLabel} / {project.year}
+            </p>
+          </div>
+        </a>
+      ))}
+
+      <!-- Invisible spacer, not a real card: guarantees enough trailing scroll room for the
+           LAST card to reach the exact same "start" snap alignment every other card gets.
+           Without this, there isn't always enough space after the last card to scroll into
+           proper alignment (the required room varies with viewport width and can exceed the
+           carousel's normal trailing padding), so it silently stops short — which is exactly
+           what caused the last card to sit misaligned with the overlay buttons above it.
+           100vw is deliberately oversized to guarantee enough room at any screen width; the
+           mandatory snap-x pulls back to the last real card before the user could actually
+           rest inside this empty region. -->
+      <div class="w-[100vw] shrink-0" aria-hidden="true"></div>
     </div>
 
-    <div class="hidden shrink-0 items-center gap-2 md:flex">
+    <!-- Overlay nav buttons: .carousel-overlay (in global.css) reuses the exact same edge
+         math as the cards' own position/width formulas, so these buttons are mathematically
+         guaranteed to land on the card's real edges instead of a separately-guessed width.
+         Sized via aspect-ratio to match the photo's height exactly (images are always the
+         first element in each card, so this wrapper's top aligns with the photo's top).
+         pointer-events-none on the wrapper so it doesn't block clicks on the cards below;
+         pointer-events-auto on the buttons themselves re-enables just those. -->
+    <div class="carousel-overlay pointer-events-none absolute top-0 hidden aspect-[16/9] items-center justify-between px-4 md:flex">
       <button
         type="button"
         data-carousel-prev
         aria-label="Previous project"
-        class="flex h-10 w-10 items-center justify-center border border-border text-ink transition-colors hover:bg-ink hover:text-cream"
+        class="pointer-events-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/90 text-ink shadow-md backdrop-blur-sm transition-colors hover:bg-white"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -30,46 +81,13 @@ const projects = await getHighlightedProjects();
         type="button"
         data-carousel-next
         aria-label="Next project"
-        class="flex h-10 w-10 items-center justify-center border border-border text-ink transition-colors hover:bg-ink hover:text-cream"
+        class="pointer-events-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/90 text-ink shadow-md backdrop-blur-sm transition-colors hover:bg-white"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </button>
     </div>
-  </div>
-
-  <!-- Full-bleed track: uses the exact same .carousel-edge padding formula as .container-edge
-       above, so its left edge is mathematically guaranteed to match the heading's, at any
-       viewport width, instead of relying on two separate formulas staying in sync. -->
-  <div
-    data-carousel-track
-    class="carousel-edge flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-  >
-    {projects.map((project) => (
-      <a
-        href={`/portfolio/${project.slug}`}
-        class="group flex w-[calc(90vw-16px)] max-w-[1130px] shrink-0 snap-start flex-col gap-4"
-      >
-        {project.photo ? (
-          <img
-            src={project.photo}
-            alt={project.title}
-            class="aspect-[16/9] w-full object-cover transition-opacity group-hover:opacity-90"
-          />
-        ) : (
-          <div class="aspect-[16/9] w-full bg-neutral-300"></div>
-        )}
-        <div class="flex items-center justify-between gap-4">
-          <h3 class="text-xl font-semibold tracking-tight text-ink transition-colors group-hover:text-brand md:text-2xl">
-            {project.title}
-          </h3>
-          <p class="whitespace-nowrap text-[11px] uppercase tracking-[0.7px] text-muted">
-            {project.tipeLabel} / {project.year}
-          </p>
-        </div>
-      </a>
-    ))}
   </div>
 
   <div class="container-edge flex justify-center">
@@ -86,19 +104,79 @@ const projects = await getHighlightedProjects();
 </section>
 
 <script>
-  document.querySelectorAll('[data-carousel-track]').forEach((track) => {
+  const AUTO_ADVANCE_MS = 5000;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('[data-carousel-track]').forEach((track) => {
     const section = track.closest('section');
     const prevBtn = section?.querySelector('[data-carousel-prev]');
     const nextBtn = section?.querySelector('[data-carousel-next]');
-    const scrollByCard = () => {
-      const card = track.querySelector('a');
-      return card ? card.getBoundingClientRect().width + 16 : 300; // 16 = gap-4
-    };
-    prevBtn?.addEventListener('click', () => {
-      track.scrollBy({ left: -scrollByCard(), behavior: 'smooth' });
-    });
-    nextBtn?.addEventListener('click', () => {
-      track.scrollBy({ left: scrollByCard(), behavior: 'smooth' });
-    });
+
+    const cards = Array.from(track.querySelectorAll<HTMLElement>('a'));
+    if (cards.length === 0) return;
+    const firstCard = cards[0];
+    const lastCard = cards[cards.length - 1];
+
+    const scrollByCard = () => firstCard.getBoundingClientRect().width + 16; // 16 = gap-4
+
+    // The scroll position where the last card would sit fully aligned, same
+    // as every other card — derived from real DOM measurements rather than
+    // track.scrollWidth, which the trailing spacer above inflates.
+    const lastCardAlignedPosition = () => lastCard.offsetLeft - firstCard.offsetLeft;
+
+    // Small threshold to account for sub-pixel rounding from scroll-snap.
+    const isAtStart = () => track.scrollLeft <= 4;
+    const isAtEnd = () => track.scrollLeft >= lastCardAlignedPosition() - 4;
+
+    function goPrev() {
+      if (isAtStart()) {
+        track.scrollTo({ left: lastCardAlignedPosition(), behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: -scrollByCard(), behavior: 'smooth' });
+      }
+    }
+
+    function goNext() {
+      if (isAtEnd()) {
+        // Auto-advance loops back to the start — expected for passive
+        // cycling, unlike the manual-click case this deliberately doesn't
+        // loop silently for (see the isAtStart/isAtEnd wrap above).
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: scrollByCard(), behavior: 'smooth' });
+      }
+    }
+
+    prevBtn?.addEventListener('click', goPrev);
+    nextBtn?.addEventListener('click', goNext);
+
+    // Auto-advance — skipped entirely if the user's OS has "reduce motion"
+    // turned on, since unprompted movement is exactly what that setting
+    // means to prevent.
+    if (!prefersReducedMotion) {
+      let autoAdvanceTimer: ReturnType<typeof setInterval> | undefined;
+
+      function startAutoAdvance() {
+        stopAutoAdvance();
+        autoAdvanceTimer = setInterval(() => {
+          if (!document.hidden) goNext();
+        }, AUTO_ADVANCE_MS);
+      }
+
+      function stopAutoAdvance() {
+        if (autoAdvanceTimer) clearInterval(autoAdvanceTimer);
+      }
+
+      // Pause the moment the user interacts, resume once they stop —
+      // never fights the user while they're browsing manually.
+      track.addEventListener('mouseenter', stopAutoAdvance);
+      track.addEventListener('mouseleave', startAutoAdvance);
+      track.addEventListener('touchstart', stopAutoAdvance, { passive: true });
+      track.addEventListener('touchend', startAutoAdvance);
+      prevBtn?.addEventListener('click', startAutoAdvance); // restart the timer on manual nav too
+      nextBtn?.addEventListener('click', startAutoAdvance);
+
+      startAutoAdvance();
+    }
   });
 </script>

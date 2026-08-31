@@ -52,3 +52,13 @@
   padding-right: max(var(--container-pad), calc((100vw - var(--container-max)) / 2 + var(--container-pad)));
   scroll-padding-inline: max(var(--container-pad), calc((100vw - var(--container-max)) / 2 + var(--container-pad)));
 }
+
+/* Positions the carousel's overlay nav buttons to match a card's actual left
+   edge and width exactly — reuses the same edge formula as .carousel-edge,
+   and the same width formula as the cards themselves (w-[calc(90vw-16px)]
+   max-w-[1130px]), so the buttons can never drift out of sync with the real
+   card position the way a separately-guessed max-width could. */
+.carousel-overlay {
+  left: max(var(--container-pad), calc((100vw - var(--container-max)) / 2 + var(--container-pad)));
+  width: min(calc(90vw - 16px), 1130px);
+}
