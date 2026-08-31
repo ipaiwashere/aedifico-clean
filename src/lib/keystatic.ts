@@ -33,21 +33,35 @@ export const layananLabels: Record<string, string> = {
 //  - Local mode (and our own hand-seeded yaml) stores just the bare filename,
 //    e.g. "photo.jpg" — the Reader API doesn't resolve a public URL for us,
 //    so we have to build one ourselves.
-//  - Keystatic Cloud stores the entire already-resolved public path instead,
-//    e.g. "/uploads/projects/bintaro-warehouse/photo.jpg".
-// This handles both, so neither the old seed data nor new Cloud-saved
-// entries break.
+//  - Keystatic Cloud stores the entire already-resolved public path instead.
+//    For an array-of-images field specifically, it also nests each file in a
+//    subfolder named after the field, numbered by position — e.g.
+//    "/uploads/projects/bintaro-warehouse/photos/0.jpg", not the flat
+//    "<slug>/<filename>" pattern the old single-image field used. The public
+//    URL must be used exactly as given, not reconstructed from just the
+//    slug + filename, or that subfolder gets silently dropped.
 const PHOTO_PUBLIC_PATH = '/uploads/projects/';
 const PHOTO_DIRECTORY = 'public/uploads/projects';
 
 function resolvePhotoUrl(slug: string, rawValue: string | null): string | null {
   if (!rawValue) return null; // no photo set (only possible on malformed/old entries)
 
-  const isFullPath = rawValue.startsWith('/');
-  const filename = isFullPath ? rawValue.split('/').pop()! : rawValue;
-  const publicUrl = isFullPath ? rawValue : `${PHOTO_PUBLIC_PATH}${slug}/${filename}`;
+  let publicUrl: string;
+  let relativePath: string; // relative to PHOTO_DIRECTORY, used to check the file actually exists
 
-  const onDiskPath = path.join(process.cwd(), PHOTO_DIRECTORY, slug, filename);
+  if (rawValue.startsWith('/')) {
+    // Cloud mode: already the full public path (e.g. ".../photos/0.jpg") —
+    // use it as-is rather than rebuilding it, since rebuilding from just the
+    // filename loses any subfolder Keystatic added.
+    publicUrl = rawValue;
+    relativePath = rawValue.slice(PHOTO_PUBLIC_PATH.length);
+  } else {
+    // Local mode / hand-seeded yaml: bare filename only, e.g. "photo.jpg".
+    relativePath = `${slug}/${rawValue}`;
+    publicUrl = `${PHOTO_PUBLIC_PATH}${relativePath}`;
+  }
+
+  const onDiskPath = path.join(process.cwd(), PHOTO_DIRECTORY, relativePath);
   if (!existsSync(onDiskPath)) return null; // field has a value, but the actual file is missing
 
   return publicUrl;
