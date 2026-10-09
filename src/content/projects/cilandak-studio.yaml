@@ -5,7 +5,9 @@ layanan:
   - interior
   - eksterior
 year: '2025'
-detail: 'Buildout interior studio dengan kualitas finishing tinggi dan fasad yang disesuaikan.'
-highlight: true
+detail: >-
+  Buildout interior studio dengan kualitas finishing tinggi dan fasad yang
+  disesuaikan.
 photos:
-  - /uploads/projects/cilandak-studio/photo.jpg
+  - /uploads/projects/cilandak-studio/photos/0.jpg
+highlight: false
