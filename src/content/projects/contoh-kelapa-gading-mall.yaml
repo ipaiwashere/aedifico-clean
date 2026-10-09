@@ -9,4 +9,4 @@ year: '2025'
 detail: 'Ini adalah data contoh (sample) untuk menguji tampilan portfolio, filter, dan pagination. Hapus kapan saja lewat Keystatic atau langsung dari folder src/content/projects.'
 highlight: false
 photos:
-  - photo.jpg
+  - /uploads/projects/contoh-kelapa-gading-mall/photo.jpg
