@@ -5,7 +5,9 @@ layanan:
   - arsitektur
   - interior
 year: '2026'
-detail: 'Renovasi hunian dengan penataan ulang tata ruang dan peningkatan estetika interior.'
-highlight: true
+detail: >-
+  Renovasi hunian dengan penataan ulang tata ruang dan peningkatan estetika
+  interior.
 photos:
-  - /uploads/projects/kemang-residence/photo.jpg
+  - /uploads/projects/kemang-residence/photos/0.jpg
+highlight: false
