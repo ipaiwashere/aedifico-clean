@@ -11,7 +11,22 @@
   --color-dark: #151515;        /* dark section background (Contact) */
   --color-dark-muted: #d4d0c9;  /* muted text on dark bg */
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif; /* body text */
+  --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;  /* headings */
+
+  /* Source Sans 3 has a smaller x-height than Inter, so the two most common
+     body sizes step up slightly to read the same. */
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.6;
+}
+
+@layer base {
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
 }
 
 /*

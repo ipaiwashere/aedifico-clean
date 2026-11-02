@@ -1,5 +1,5 @@
 ---
-import logo from '../assets/brand/logo.png';
+import logo from '../assets/brand/logo.svg';
 
 interface Props {
   // When true, hides the section links + hamburger menu, leaving just the
@@ -21,8 +21,8 @@ const links = [
 
 <header class="sticky top-0 z-50 border-b border-border bg-cream">
   <div class="container-edge flex items-center justify-between gap-4 py-[18px] md:py-5">
-    <a href="/" class="block w-[159px] shrink-0">
-      <img src={logo.src} alt="Aedifico" width="159" height={Math.round(159 * (logo.height / logo.width))} />
+    <a href="/" class="block w-[170px] shrink-0">
+      <img src={logo.src} alt="Aedifico" width="170" height={Math.round(170 * (logo.height / logo.width))} />
     </a>
 
     {!minimal && (
