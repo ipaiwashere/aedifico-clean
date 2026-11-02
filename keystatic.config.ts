@@ -25,10 +25,7 @@ export default config({
           },
           slug: {
             label: 'ID Internal',
-            description: 'Dibuat otomatis oleh sistem sebagai ID unik untuk proyek ini. Tidak akan ditampilkan di website — Anda tidak perlu mengubah atau memperhatikan kolom ini.',
-            // Random ID instead of deriving from the name — admins can
-            // ignore this entirely, it's just an internal file reference.
-            generate: () => `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
+            description: 'Dibuat otomatis dari nama proyek. Dipakai untuk pencarian di CMS dan alamat halaman proyek (contoh: kemang-residence). Tidak perlu diubah.',
           },
         }),
 
