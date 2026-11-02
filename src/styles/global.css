@@ -2,7 +2,7 @@
 
 @theme {
   /* Aedifico brand colors (from Figma) */
-  --color-cream: #f4f1eb;      /* page background — "Spring Wood" */
+  --color-cream: #fcfaf6;      /* page background — lighter than before so the beige in the logo stands out */
   --color-ink: #151515;         /* primary text — "Cod Gray" */
   --color-muted: #615f5b;       /* secondary text — "Chicago" */
   --color-border: #d7d2c8;      /* hairline borders — "Swirl" */
